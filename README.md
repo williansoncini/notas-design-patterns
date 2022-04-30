@@ -118,14 +118,14 @@ class Som implements ControleSom{
 }
 ```
 
-## Abstract 
+## Abstract
 
 ![](imgs/abstract.png)
 
 
 ```ts
 abstract class Animal {
-  abstract makeNoise() :string 
+  abstract makeNoise() :string
 }
 
 class Dog extends Animal{
@@ -135,14 +135,157 @@ class Dog extends Animal{
 }
 ```
 
+## Singleton
+
+Receber somente uma instancia de uma entidade em todo programa. Para que isso aconteca é necessário ter uma trativa na criação da entidade.
+
+Estrutura
+
+![](imgs/singleton.png)
+
+exemplo de singleton classico
+```ts
+export class Carro {
+  private static _carro: Carro | null = null;
+
+  private constructor() {}
+
+  static get carro(): Carro {
+    if (Carro._carro === null) {
+      Carro._carro = new Carro();
+    }
+
+    return Carro._carro;
+  }
+}
+```
 
 
+## Builder
 
+![](imgs/builder.png)
 
+Separar a criação de um objeto complexo da sua representação de modo que o mesmo processo de construção, possa criar diferentes representações.
 
+> Código para o cliente
 
+- Código que cria
+- Código que usa
 
+Utilizado em construção de objetos complexos
+- Construtores muito complexos
+- Composição de vários objetos (Composite)
 
+- Permite a criação de um objeto em etapas
+- Permite o method chaining - Encadeamento de chamadas de métodos
+
+Esse método de criação de entidades para o cliente, remove a complexidade para o cliente, deixando-o somente com maneira faceis de invocar entidades para ele.
+
+Exemplo simples, mas nos `src/builder/exemplo-complexo` existe um exemplo mais real :)
+
+`Person.ts`
+
+```ts
+export class Person {
+  constructor(public name?: string, public age?: number) {}
+}
+```
+
+`personBuilder.ts`
+
+```ts
+import { Person } from './person';
+
+export class PersonBuilder {
+  private person = new Person();
+
+  newPerson(): void {
+    this.person = new Person();
+  }
+
+  setName(name: string): this {
+    this.person.name = name;
+    return this;
+  }
+
+  setAge(age: number): this {
+    this.person.age = age;
+    return this;
+  }
+
+  getResult(): Person {
+    return this.person;
+  }
+}
+```
+
+`main.ts`
+
+```ts
+import { PersonBuilder } from './personBuilder';
+
+const personBuilder = new PersonBuilder();
+const person1 = personBuilder.setName('Albert').setAge(76).getResult();
+personBuilder.newPerson(); // Reset do builder
+const person2 = personBuilder.setName('Nicola').setAge(86).getResult();
+
+console.log(person1);
+console.log(person2);
+```
+
+## Prototype
+
+![](imgs/prototype.png)
+
+Especificar os tipos de objetos a serem criados usando uma instancia-protótipo e criar novos objetos pela cópia desse protótipo
+
+> Criar novos objetos a partir da instancia do objeto
+
+Temos um objeto criado e então se precisa de outro objeto, logo não fazemos new Object(), fazemos Object.create(object). Dessa maneira estamos criando um novo objeto utilizando o protótipo que passamos como parametro.
+
+- O tipo do objeto a ser criado é determinado pelo objeto protótipo
+- é tipicamente usado para evitar a recriação de objetos caros
+- Ajuda a evitar a explosão de subclasses
+- Pode (ou não) manter um registro de objetos protótipo em um objeto separado
+- Geralmente é criado apenas como um método 'clone' dentro do objeto protótipo
+- O metódo clone pode gerar uma 'shallow' ou 'deep' copy do objeto protótipo
+- Evita que o cliente conheça as classes que criam o objeto. Para depender das classes concretas
+
+Exemplo
+
+```ts
+interface Prototype {
+  clone(): Prototype;
+}
+
+class Person implements Prototype {
+  constructor(public name: string) {}
+
+  clone(): this {
+    const newPerson = Object.create(this);
+    return newPerson;
+  }
+}
+
+const person = new Person('Albert');
+const newPerson = person.clone();
+
+person.name // Albert
+newPerson.name // Albert
+```
+
+Exemplo simples
+
+```ts
+const person = {
+  name: 'Albert'
+}
+
+const newPerson = Object.create(person)
+
+person.name // Albert
+newPerson.name // Albert
+```
 
 
 
