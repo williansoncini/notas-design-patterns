@@ -1,4 +1,17 @@
-Começando com UML 🚀
+Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre ele, pois sei muito pouco 🚀
+
+- [UML](#uml)
+  - [Classe](#classe)
+  - [Agregação](#agregação)
+  - [Composição](#composição)
+  - [Dependencia](#dependencia)
+  - [Realization](#realization)
+  - [Abstract](#abstract)
+- [Design patterns](#design-patterns)
+  - [Singleton](#singleton)
+  - [Builder](#builder)
+  - [Prototype](#prototype)
+  - [Factory method](#factory-method)
 
 # UML
 
@@ -135,6 +148,11 @@ class Dog extends Animal{
 }
 ```
 
+
+# Design patterns
+
+São vários! Então vamos repassar alguns ✅
+
 ## Singleton
 
 Receber somente uma instancia de uma entidade em todo programa. Para que isso aconteca é necessário ter uma trativa na criação da entidade.
@@ -159,7 +177,6 @@ export class Carro {
   }
 }
 ```
-
 
 ## Builder
 
@@ -251,6 +268,10 @@ Temos um objeto criado e então se precisa de outro objeto, logo não fazemos ne
 - O metódo clone pode gerar uma 'shallow' ou 'deep' copy do objeto protótipo
 - Evita que o cliente conheça as classes que criam o objeto. Para depender das classes concretas
 
+> É necessário tomar cuidado ao utilizar a maneira padrão de cópia, que é a shallow copy. Essa maneira de cópia pode causar alterações em seus objetos clonados, se houver uma alteração no objeto 'pai'.
+
+> Para clonar objetos de maneira mais segura (Para que não haja alterações), é necessário realizar uma deep copy. Que pode ser implementada na sua estrutura ou utilizar biblioteca de terceiros, como o lodash.
+
 Exemplo
 
 ```ts
@@ -287,8 +308,49 @@ person.name // Albert
 newPerson.name // Albert
 ```
 
+## Factory method
 
+![](imgs/factoryMethod.png)
 
+Definir uma interface para criar um objeto, mas deixar as subclasses decidirem que classe instanciar. O Factory method permite adiar a instanciação para as subclasses.
+
+Simplesmente operações que criam objetos.
+
+Muito boa para nunca deprender diretamente de classes concretas, deixando assim seu código desacoplado.
+
+Exemplo
+
+```ts
+interface Product {
+  sayHi(): void;
+}
+
+export class concreteProduct implements Product {
+  sayHi(): void {
+    console.log('Hi!');
+  }
+}
+
+abstract class Creator {
+  abstract factoryMethod(): Product;
+
+  creteAndShow(): void {
+    const product = this.factoryMethod();
+    console.log(product);
+  }
+}
+
+export class ConcreteCreator extends Creator {
+  factoryMethod(): Product {
+    return new concreteProduct();
+  }
+}
+
+const creator = new ConcreteCreator();
+const product = creator.factoryMethod();
+product.sayHi();
+creator.creteAndShow();
+```
 
 
 

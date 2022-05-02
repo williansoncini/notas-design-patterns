@@ -2,7 +2,7 @@ interface Prototype {
   clone(): Prototype;
 }
 
-class Person implements Prototype {
+export class Person implements Prototype {
   constructor(public name: string) {}
 
   clone(): this {
