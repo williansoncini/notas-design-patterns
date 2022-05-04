@@ -8,10 +8,14 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Realization](#realization)
   - [Abstract](#abstract)
 - [Design patterns](#design-patterns)
-  - [Singleton](#singleton)
-  - [Builder](#builder)
-  - [Prototype](#prototype)
-  - [Factory method](#factory-method)
+  - [Creational](#creational)
+    - [Singleton](#singleton)
+    - [Builder](#builder)
+    - [Prototype](#prototype)
+    - [Factory method](#factory-method)
+    - [Abstract factory](#abstract-factory)
+  - [Estrutural](#estrutural)
+    - [Composite](#composite)
 
 # UML
 
@@ -153,7 +157,11 @@ class Dog extends Animal{
 
 São vários! Então vamos repassar alguns ✅
 
-## Singleton
+## Creational
+
+Padões para criação de objetos ❤
+
+### Singleton
 
 Receber somente uma instancia de uma entidade em todo programa. Para que isso aconteca é necessário ter uma trativa na criação da entidade.
 
@@ -178,7 +186,7 @@ export class Carro {
 }
 ```
 
-## Builder
+### Builder
 
 ![](imgs/builder.png)
 
@@ -250,7 +258,7 @@ console.log(person1);
 console.log(person2);
 ```
 
-## Prototype
+### Prototype
 
 ![](imgs/prototype.png)
 
@@ -308,7 +316,7 @@ person.name // Albert
 newPerson.name // Albert
 ```
 
-## Factory method
+### Factory method
 
 ![](imgs/factoryMethod.png)
 
@@ -352,9 +360,76 @@ product.sayHi();
 creator.creteAndShow();
 ```
 
+### Abstract factory
 
+![](imgs/abstractFactory.png)
 
+Fornecer uma interface para a criação de familias de objetos relacionados ou independentes sem especificar suas classes concretas.
 
+- É um padrão de criação assim como o factory method
+- Usa os factorys methods
+- Cria objetos agrupando por objetos compátiveis
+- Super foco em interfaces
+- Permite criar restrições para garantir que um objeto está utilizando os objetos de sua familia
 
+![](imgs/interfaces.png)
+
+Exemplo simples de fabrica de veiculos:
+```ts
+interface VehicleProtocol {
+  name:string
+}
+
+class VehicleClass implements VehicleProtocol {
+  constructor(public name:string) {};
+}
+
+interface VehicleFactory {
+  createVehicle(name: string): VehicleProtocol;
+}
+
+class VehicleFactory implements VehicleFactory{
+  createVehicle(name: string) {
+    return new VehicleClass(name);
+  }
+}
+
+const vehicleFactory = new VehicleFactory();
+const vahicle = vehicleFactory.createVehicle('Fusca');
+console.log(vehicle.name) //fusca
+```
+
+## Estrutural
+
+Padrões para cuidar da estrutura do projeto
+
+### Composite
+
+![](imgs/composite.png)
+
+Se preocupam com a forma como os objetos são compostos para formar estruturas maiores
+
+Compor objetos em estruturas de arvore para representar hierarquis partes/todo. Composite permite aos clientes tratarem de maneira uniforme objetos individuais e composições de objetos.
+
+> Vai criando os objetos por partes
+
+- É um padrão estrutural
+- Faz sentido em estruturas que podem ser tratadas hieraquicamente
+- Prioriza a composição em vez de herança
+- Exemplo: Produto solto com preço e caixa com vários do mesmo produtos também com preço
+
+Muito parecido com uma arvore binaria
+
+![](imgs/binarytree-meme.jpg)
+
+- Interface em comum para objetos 'Composite' e 'Leaf'
+- Objetos composites são objetos que tem filho e não fazem trabalho. Ele delega as tarefas para seus filhos
+- Objetos leaf são aqueles quem executam as tarefas
+
+Aplicabilidade
+
+- Deve ser utilizada quando a estrutura do projeto pode ser representada hierárquicamente
+- Quando quiser que o código cliente trate tanto objeto simples quanto compostos da mesma maneira
+- 
 
 
