@@ -16,6 +16,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
     - [Abstract factory](#abstract-factory)
   - [Estrutural](#estrutural)
     - [Composite](#composite)
+  - [Adapter](#adapter)
 
 # UML
 
@@ -482,5 +483,52 @@ validateComposite.add(validateEmail, validateString);
 console.log(validateComposite.validate('teste@')); //true
 ```
 
+## Adapter
 
+![](imgs/adapter.png)
 
+Converte a interface de uma classe em outra interface esperada pelo cliente. O adapter permite que classes trabalhem em conjunto, pois de outra forma seria impossível por conta de suas interfaces imcompativeis.
+
+- Faz exatamente oque adaptadores físicos do mundo real faz, por exemplo o adaptador da tomada permite que tomadas com encaixes diferentes se conectem.
+- Pode ser utilizado para adaptar interfaces de códigos legados para novo códigos
+- Resumindo adapta qualquer interface para qualquer outra interface :3
+
+O meme de novo rsrsrs
+
+![](imgs/interfaces.png)
+
+> Mas o melhor é sem dúvida que ele permite que você dependa de coisas somente do seu dominio, colocando todos as coisas de terceiros em adaptadores.
+>
+> Oque é muito bom devido a sibstituição de libs externas ou códigos legados
+
+Exemplo
+
+`validateEmailProtocol.ts`
+
+```ts
+export interface ValidateEmailFnProtocol {
+  (email: string): boolean;
+}
+```
+
+`emailValidatorAdapter.ts`
+
+```ts
+import isEmail from 'validator/lib/isEmail';
+import { ValidateEmailFnProtocol } from '../interfaces/validateEmailProtocol';
+
+export const emailValidatorFnAdapter: ValidateEmailFnProtocol = (
+  email: string,
+): boolean => {
+  return isEmail(email);
+};
+```
+
+`main.ts`
+
+```ts
+import { emailValidatorFnAdapter } from './validation/emailValidatorFnAdapter';
+
+const email = 'albert@science.com';
+console.log(emailValidatorFnAdapter(email)) //true
+```
