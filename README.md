@@ -17,6 +17,9 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Estrutural](#estrutural)
     - [Composite](#composite)
   - [Adapter](#adapter)
+  - [Bridge](#bridge)
+  - [Decorator](#decorator)
+  - [Facade](#facade)
 
 # UML
 
@@ -532,3 +535,141 @@ import { emailValidatorFnAdapter } from './validation/emailValidatorFnAdapter';
 const email = 'albert@science.com';
 console.log(emailValidatorFnAdapter(email)) //true
 ```
+
+## Bridge
+
+![](imgs/bridge.png)
+
+Igual ao adapter porém oque muda é a intenção
+
+Bridge é um padrão de projeto estrutural que tem a intenção de desacoplar uma abstração da sua implementação, de modo que as duas possam variar e evoluir independentemente.
+
+- **Abstração** é um código de alto nivel que geralmente delega ações para outro objeto.
+
+- **Implementação** é o código que realmente faz o trabalho
+
+> GOF pag 208 - A diferença chave enrtre esses padrões está nas suas intenções... O padrão Adapter faz as coisas funcionarem após elas terem sido projetadas; O Bridge as faz funcionar antes que existam.
+
+Exemplo simples
+
+`device.ts`
+
+```ts
+export interface DeviceProtocol {
+  setPower(power : boolean) : void;
+  getPower() : boolean;
+}
+```
+
+`tv.ts`
+
+```ts
+export class Tv implements DeviceProtocol {
+  private powerStatus = false;
+
+  setPower(power: boolean) {
+    this.powerStatus = power;
+  }
+
+  getPower() : boolean {
+    return this.powerStatus;
+  }
+}
+```
+
+`remoteControl.ts`
+
+```ts
+export class remoteControl {
+  constructor(device: DeviceProtocol){};
+
+  togglePower(){
+    this.device.setPower(!(this.device.getPower()));
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const tv = new Tv();
+const remoteControlTv = new RemoteControl(tv);
+remoteControlTv.togglePower();
+```
+
+## Decorator
+
+![](imgs/decorator.png)
+
+Agregar responsabilidades adicionais a um objetodinamicamente. Os decorator fornecem uma alternative flexivel ao uso de subclasses para extensão de funcionalidades
+
+- Usa a composição ao inves de gerança
+- É muito parecido com o composite porém tem a interção diferente
+- É usada para adicionar funcionalidades a objetos em tempo de execução
+- Finge ser o objeto sendo decorado, porém repassa chamadas de métodos para o mesmo
+- Pode executar ações antes e depois das chamadas dos métodos do objeto decorado
+- Pode manipular dados antes do retorno
+
+Quanto utilizar?
+
+- Quando for preciso adicionar funcionalidades no objeto sem quebrar o código anterior (Facilita para testes)
+- For preferivel utilizar composição ao invés de herança
+
+Exemplo
+
+`productProtocol.ts`
+
+```ts
+export interface ProductProtocol {
+  getName() : string;
+  getPrice() : number;
+}
+```
+
+`tshirt.ts`
+
+```ts
+export class Tshirt implements ProductProtocol {
+  const name = 'Camisa';
+  const price = 10.99;
+
+  getName() {
+    return this.name;
+  }
+
+  getPrice() {
+    return this.price;
+  }
+}
+```
+
+`productDecorator.ts`
+
+```ts
+export class ProductDecorator implements ProductProtocol {
+  constructor(protected product : ProductProtocol) {};
+
+  getName(){
+    return this.product.getName();
+  }
+
+  getPrice(){
+    return this.product.getPrice();
+  }
+}
+```
+
+> Aqui acontece a mágica, alteramos o comportamento de um objeto sem que alteremos oque já foi construido. Dessa forma podemos criar vários decoradores de acordo com as mudanças de comportamento necessárias no objeto.
+
+`productPrinted.ts`
+
+```ts
+export class ProducPrintedDecorator extends ProductDecorator {
+  getName() {
+    return this.product.getName() + ' Printed';
+  }
+}
+```
+
+## Facade
+
