@@ -20,6 +20,11 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Bridge](#bridge)
   - [Decorator](#decorator)
   - [Facade](#facade)
+  - [Proxy](#proxy)
+    - [Proxy virtual](#proxy-virtual)
+    - [Proxy remoto](#proxy-remoto)
+    - [Proxy de proteção](#proxy-de-proteção)
+    - [Proxy inteligente](#proxy-inteligente)
 
 # UML
 
@@ -680,6 +685,8 @@ Utilize quando você deseja:
 - Disponibilizar uma interface simples para um sistema complexo
 - Definir pontos de acessos no sistema
 
+> Tome cuidado para não criar god class, se perceber que a classe está fazendo muita coisa, separe em mais fachadas :3
+
 exemplo (Utilizando o exemplo do padrão Builder)
 
 `Person.ts`
@@ -749,3 +756,70 @@ const nikola = personBulderFacade.createPersonWithNameNikola();
 console.log(albert) // name: Albert, age: 76
 console.log(nikola) // name: Nikola, age: 86
 ```
+
+## Proxy
+
+![](imgs/proxy.png)
+
+Padrão que tem a intenção de fornecer um substitudo ou marcador de localização para outro objeto para controlar o acesso a esse objeto.
+
+- Usa composição, portanto tem a estrutura bem semelhante ao composite e decorator (Intenções diferentes)
+- Usa um objeto proxy que finge ser o real
+- Usado para controle de acesso, logs, cache e etc...
+- Pode escolher como e quando repassar chamadas de métodos para o objeto real
+- Pode executar ações antes e depois da chamada do objeto real
+- Tem variações: proxy virtual, proxy remoto, proxy de proteção, proxy inteligente...
+
+Alguns tipos de proxys
+
+### Proxy virtual
+
+Controla acesso a recursos que podem ser caros para criação ou utilização.
+
+### Proxy remoto
+
+Controla acesso a recursos que estão em servidores remotos
+
+### Proxy de proteção
+
+Executa ações de proteção de acordo com o recurso que será acessado. Camadas de validações de valores, autenticação, permissões etc...
+
+### Proxy inteligente
+
+Além de repassar chamadas ao objeto real, ele executa tarefas adicionais para saber quando isso é necessário e faz ações diferentes de acordo com as ações realizadas.
+
+Exemplo de aplicabilidade, pois existem muitas, o limite é imaginação!
+
+- (Proxy virtual) Limitar acesso direto a objetos caros de serem criados ou manuseados
+- (Proxy de proteção) Limitar acesso a partes da aplicação
+- (Proxy remoto) Ligar seu sistema com serviçois remotos
+- (Proxy de cache) Utilizar chamadas guardadas que foram realizadas
+- Interceptar qualquer chamada ao objeto real e realizar ações antes ou depois dela.
+
+Exemplo
+
+```ts
+export interface SubjectProtocol {
+  request(): void;
+}
+
+export class RealSubject implements SubjectProtocol{
+  request(): void {
+    console.log('Bora puxar o carro!')
+  }
+}
+
+export class Proxy implements SubjectProtocol {
+  constructor (private subject: SubjectProtocol){};
+  request() : void {
+    console.log('Faz algo diferente');
+    this.subject.request();
+    console.log('Faz algo diferente')
+  }
+}
+```
+
+
+
+
+
