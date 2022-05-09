@@ -673,3 +673,79 @@ export class ProducPrintedDecorator extends ProductDecorator {
 
 ## Facade
 
+Facade (Fachada) é um padrão de projeto estrutural que tem a intenção de fornecer uma interface para um conjunto de interfaces em um subsistema. Facade define uma interface mais alta em um subsistema, o tornando mais fácil de ser utilizado.
+
+Utilize quando você deseja:
+
+- Disponibilizar uma interface simples para um sistema complexo
+- Definir pontos de acessos no sistema
+
+exemplo (Utilizando o exemplo do padrão Builder)
+
+`Person.ts`
+
+```ts
+export class Person {
+  constructor(public name?: string, public age?: number) {}
+}
+```
+
+`personBuilder.ts`
+
+```ts
+import { Person } from './person';
+
+export class PersonBuilder {
+  private person = new Person();
+
+  newPerson(): void {
+    this.person = new Person();
+  }
+
+  setName(name: string): this {
+    this.person.name = name;
+    return this;
+  }
+
+  setAge(age: number): this {
+    this.person.age = age;
+    return this;
+  }
+
+  getResult(): Person {
+    return this.person;
+  }
+}
+```
+
+personBuilderFacade.ts
+
+```ts
+export class PersonBuilderFacade {
+  private personBuilder = new PersonBuilder();
+
+  createPersonWithNameAlbert() {
+    const person = this.personBuilder.setName('Albert').setAge(76).getResult();
+    this.personBuilder.newPerson(); // Reset do builder
+    return person
+  }
+
+  createPersonWithNameNikola() {
+    const person = this.personBuilder.setName('Nicola').setAge(86).getResult();
+    this.personBuilder.newPerson(); // Reset do builder
+    return person
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const personBulderFacade = new PersonBuilderFacade();
+
+const albert = personBulderFacade.createPersonWithNameAlbert();
+const nikola = personBulderFacade.createPersonWithNameNikola();
+
+console.log(albert) // name: Albert, age: 76
+console.log(nikola) // name: Nikola, age: 86
+```
