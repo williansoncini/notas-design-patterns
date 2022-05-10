@@ -25,6 +25,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
     - [Proxy remoto](#proxy-remoto)
     - [Proxy de proteção](#proxy-de-proteção)
     - [Proxy inteligente](#proxy-inteligente)
+  - [Flyweight](#flyweight)
 
 # UML
 
@@ -819,7 +820,27 @@ export class Proxy implements SubjectProtocol {
 }
 ```
 
+## Flyweight
 
+![](imgs/flyWeight.png)
+
+É um padrão de projeto que tem o objetivo de usar o compartilhamento para suportar o alto consumo de recursos com objetos de forma granular.
+
+- É um padrão de otimização
+- Visa economizar a memória RAM em aplicações com grande volume de objetos
+- Resolve o problema do desenpenho dividindo o estado de um objeto em 'intrinseco' e 'extrinseco'
+  - Intrinseco : Estado que muda pouco ou não muda
+  - Extrinseco : Estado que muda constantemente ( Movido para fora do objeto )
+- Só é utilizado quando sua aplicação está com problemas de alto uso de memória.
+
+**Utilize esse padrão se as condições abaixo forem verdadeiras**
+
+- Sua aplicação utiliza uma grande quantidade de objetos
+- Os custos de armazenamento são altos devido a grande quantidade de objetos
+- A maioria dos estados dos objetos podem se tornar extrinsecos
+- Muitos objetos podem ser substituidos por objetos compartilhados
+- A aplicação não depende da identidade do objeto (Pois se compartilhados, serão iguais)
+-
 
 
 
