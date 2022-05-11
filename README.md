@@ -840,7 +840,13 @@ export class Proxy implements SubjectProtocol {
 - A maioria dos estados dos objetos podem se tornar extrinsecos
 - Muitos objetos podem ser substituidos por objetos compartilhados
 - A aplicação não depende da identidade do objeto (Pois se compartilhados, serão iguais)
--
+
+
+> Confesso que foi o que menos entendi ahusdfhuas
+
+vou pensar em um exemplo simples para anotar aqui, mas por enquanto existe um exempo na pasta. :3
+
+
 
 
 
