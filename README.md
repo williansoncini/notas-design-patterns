@@ -26,7 +26,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
       - [Proxy de proteção](#proxy-de-proteção)
       - [Proxy inteligente](#proxy-inteligente)
     - [Flyweight](#flyweight)
-  - [Behavipural](#behavipural)
+  - [Behavioral](#behavioral)
     - [Strategy](#strategy)
 
 # UML
@@ -850,7 +850,7 @@ export class Proxy implements SubjectProtocol {
 
 vou pensar em um exemplo simples para anotar aqui, mas por enquanto existe um exempo na pasta. :3
 
-## Behavipural
+## Behavioral
 
 Os padrões comportamentais se preocupa com algoritmos, responsabilidade dos objetos e também o padrão de comunicação entre eles
 
