@@ -28,6 +28,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
     - [Flyweight](#flyweight)
   - [Behavioral](#behavioral)
     - [Strategy](#strategy)
+  - [Command](#command)
 
 # UML
 
@@ -956,6 +957,23 @@ console.log(shoppingCart.getTotalWithDiscount()); // 160
 ```
 
 Assim caso se faça necessário uma nova estratégia de desconto, basta a criação de mais uma classe de desconto. Assim a o trecho abaixo poderá ser substituido sem problemas `shoppingCart.discount = new CustomDiscount();`.
+
+## Command
+
+![](imgs/Command.png)
+
+Encapsular uma solicitação como um objeto :3
+
+Desta forma permitindo que você parametrize clientes com diferentes solicitações, enfilere ou registre solicitações (logs) e também suporte solicitações que poderam ser desfeitas.
+
+> Lascar funções callback
+
+- Transforma uma solicitação em um objeto, com todas informações necessários para quem deve receber a solicitação (Objeto alvo)
+- Versão orientada a objetos para funções callback
+- Os camandos podem ser enfileirados, armazenados ou desfeitos
+- Permite a criação de comandos compostos
+- Desacopla o código do objeto que faz a solicitação, do objeto que recebe a solicitação.
+- Usa composição ao invés de herança
 
 
 
