@@ -14,18 +14,20 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
     - [Prototype](#prototype)
     - [Factory method](#factory-method)
     - [Abstract factory](#abstract-factory)
-  - [Estrutural](#estrutural)
+  - [Structural](#structural)
     - [Composite](#composite)
-  - [Adapter](#adapter)
-  - [Bridge](#bridge)
-  - [Decorator](#decorator)
-  - [Facade](#facade)
-  - [Proxy](#proxy)
-    - [Proxy virtual](#proxy-virtual)
-    - [Proxy remoto](#proxy-remoto)
-    - [Proxy de proteção](#proxy-de-proteção)
-    - [Proxy inteligente](#proxy-inteligente)
-  - [Flyweight](#flyweight)
+    - [Adapter](#adapter)
+    - [Bridge](#bridge)
+    - [Decorator](#decorator)
+    - [Facade](#facade)
+    - [Proxy](#proxy)
+      - [Proxy virtual](#proxy-virtual)
+      - [Proxy remoto](#proxy-remoto)
+      - [Proxy de proteção](#proxy-de-proteção)
+      - [Proxy inteligente](#proxy-inteligente)
+    - [Flyweight](#flyweight)
+  - [Behavipural](#behavipural)
+    - [Strategy](#strategy)
 
 # UML
 
@@ -409,7 +411,7 @@ const vahicle = vehicleFactory.createVehicle('Fusca');
 console.log(vehicle.name) //fusca
 ```
 
-## Estrutural
+## Structural
 
 Padrões para cuidar da estrutura do projeto
 
@@ -492,7 +494,7 @@ validateComposite.add(validateEmail, validateString);
 console.log(validateComposite.validate('teste@')); //true
 ```
 
-## Adapter
+### Adapter
 
 ![](imgs/adapter.png)
 
@@ -542,7 +544,7 @@ const email = 'albert@science.com';
 console.log(emailValidatorFnAdapter(email)) //true
 ```
 
-## Bridge
+### Bridge
 
 ![](imgs/bridge.png)
 
@@ -603,7 +605,7 @@ const remoteControlTv = new RemoteControl(tv);
 remoteControlTv.togglePower();
 ```
 
-## Decorator
+### Decorator
 
 ![](imgs/decorator.png)
 
@@ -677,7 +679,7 @@ export class ProducPrintedDecorator extends ProductDecorator {
 }
 ```
 
-## Facade
+### Facade
 
 Facade (Fachada) é um padrão de projeto estrutural que tem a intenção de fornecer uma interface para um conjunto de interfaces em um subsistema. Facade define uma interface mais alta em um subsistema, o tornando mais fácil de ser utilizado.
 
@@ -758,7 +760,7 @@ console.log(albert) // name: Albert, age: 76
 console.log(nikola) // name: Nikola, age: 86
 ```
 
-## Proxy
+### Proxy
 
 ![](imgs/proxy.png)
 
@@ -773,19 +775,19 @@ Padrão que tem a intenção de fornecer um substitudo ou marcador de localizaç
 
 Alguns tipos de proxys
 
-### Proxy virtual
+#### Proxy virtual
 
 Controla acesso a recursos que podem ser caros para criação ou utilização.
 
-### Proxy remoto
+#### Proxy remoto
 
 Controla acesso a recursos que estão em servidores remotos
 
-### Proxy de proteção
+#### Proxy de proteção
 
 Executa ações de proteção de acordo com o recurso que será acessado. Camadas de validações de valores, autenticação, permissões etc...
 
-### Proxy inteligente
+#### Proxy inteligente
 
 Além de repassar chamadas ao objeto real, ele executa tarefas adicionais para saber quando isso é necessário e faz ações diferentes de acordo com as ações realizadas.
 
@@ -820,7 +822,7 @@ export class Proxy implements SubjectProtocol {
 }
 ```
 
-## Flyweight
+### Flyweight
 
 ![](imgs/flyWeight.png)
 
@@ -832,6 +834,8 @@ export class Proxy implements SubjectProtocol {
   - Intrinseco : Estado que muda pouco ou não muda
   - Extrinseco : Estado que muda constantemente ( Movido para fora do objeto )
 - Só é utilizado quando sua aplicação está com problemas de alto uso de memória.
+
+> Cuidado com esse padrão! Ele pode aliviar a memória RAM, mas sobrecarregar outros recursos da máquina.
 
 **Utilize esse padrão se as condições abaixo forem verdadeiras**
 
@@ -845,6 +849,132 @@ export class Proxy implements SubjectProtocol {
 > Confesso que foi o que menos entendi ahusdfhuas
 
 vou pensar em um exemplo simples para anotar aqui, mas por enquanto existe um exempo na pasta. :3
+
+## Behavipural
+
+Os padrões comportamentais se preocupa com algoritmos, responsabilidade dos objetos e também o padrão de comunicação entre eles
+
+### Strategy
+
+![](imgs/strategy.png)
+
+Definir uma fámilia de algoritmos, encapsular cada um deles e fazelos intercambiaveis. O strategy permite que o algoritmo varie independentemente dos clientes que o utilizam.
+
+- Separar a regra de negócio das variações de algoritmos.
+- Definie familias de algoritmos por variações
+- Usa composição para permitir a troca de algoritmo em tempo de execução
+- Criação de algoritmos sem a necessidade de condicionais
+
+Utilize quando:
+
+- Você tiver variantes de um mesmo algoritmo e seja necessário trocar esses algoritmos em tempo de execução.
+- Você precisar isolar a regra de negócio do algoritmo que deve ser aplicado
+- Você perceber que está fazendo condicionais apenas para trocar o resultado final de um algoritmo
+
+exemplo de estratégias de descontos para carrinhos em um ecommerce:
+
+`shoppingCart.ts`
+
+```ts
+export class ShoppingCart {
+  private _products: ProductProtocol[] = [];
+  private _discountStrategy: DiscountStrategy = new DiscountStrategy();
+
+  addProducts(...products : ProductProtocol[]) :void {
+    products.forEach(item => this._products.push(item));
+  }
+
+  getTotal(): number {
+    return this._products.reduce((sum, nex) => sum + next.price, 0);
+  }
+
+  getTotalWithDiscount() : number {
+    return this._discountStrategy(this);
+  }
+}
+```
+
+`productProtocol.ts`
+
+```ts
+export interface ProductProtocol {
+  name: string;
+  price: number;
+}
+```
+
+`discountStrategy.ts`
+
+```ts
+export class DiscountStrategy {
+  protected discount = 0;
+
+  getDiscount(cart: ShoppingCart) : number {
+    const total = cart.getTotal()
+    return  total - (total * discount / 100);
+  }
+}
+```
+
+`customDiscount.ts`
+
+Aqui definimos descontos customizados, separando assim as estretégias de desconto.
+
+```ts
+export class CustomDiscount extends DiscountStrategy {
+
+  getDiscount(cart: ShoppingCart) : number {
+    const total = cart.getTotal();
+
+    if (total >= 100 && total < 200) {
+        this.discount = 10;
+    } else if (total >= 200 && total < 300) {
+      this.discount = 20;
+    } else if (total >= 300) {
+      this.discount = 30;
+    }
+
+    return total - (total * this.discount) / 100;
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const shoppingCart = new EcommerceShoppingCart();
+shoppingCart.discount = new CustomDiscount();
+
+
+shoppingCart.addProduct({ name: 'Produto A', price: 50 });
+shoppingCart.addProduct({ name: 'Produto B', price: 50 });
+shoppingCart.addProduct({ name: 'Produto C', price: 50 });
+shoppingCart.addProduct({ name: 'Produto D', price: 50 });
+
+console.log(shoppingCart.getTotal()); // 200
+console.log(shoppingCart.getTotalWithDiscount()); // 160
+```
+
+Assim caso se faça necessário uma nova estratégia de desconto, basta a criação de mais uma classe de desconto. Assim a o trecho abaixo poderá ser substituido sem problemas `shoppingCart.discount = new CustomDiscount();`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
