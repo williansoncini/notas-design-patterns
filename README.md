@@ -970,13 +970,17 @@ Desta forma permitindo que você parametrize clientes com diferentes solicitaç�
 
 - Transforma uma solicitação em um objeto, com todas informações necessários para quem deve receber a solicitação (Objeto alvo)
 - Versão orientada a objetos para funções callback
-- Os camandos podem ser enfileirados, armazenados ou desfeitos
+- Os comandos podem ser enfileirados, armazenados ou desfeitos
 - Permite a criação de comandos compostos
 - Desacopla o código do objeto que faz a solicitação, do objeto que recebe a solicitação.
 - Usa composição ao invés de herança
 
 
+Quando utilizar?
 
+- Quando você deseja desacoplar o objeto que envia a solicitação do objeto que recebe
+- Você quer tratar um comando como um objeto (Tendo toda a parte de armazenamento, enfileiramento e etc...)
+- Você quer permitir que as solicitações posasm ser feitas e desfeitas
 
 
 
