@@ -1066,6 +1066,8 @@ breadMachineApp.undoCommand('BTN-1') // OFF
 
 ## Mediator
 
+![](imgs/mediator.png)
+
 Define um objeto que encapsula, o como um conjunto de objetos interage. O mediator promove o acoplamento fraco ao evitar que os objeto se referenciem diretamente, permitindo que você varie sua interações.
 
 - Encapsula um conjunto de objetos
