@@ -29,6 +29,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Behavioral](#behavioral)
     - [Strategy](#strategy)
   - [Command](#command)
+  - [Mediator](#mediator)
 
 # UML
 
@@ -849,7 +850,7 @@ export class Proxy implements SubjectProtocol {
 
 > Confesso que foi o que menos entendi ahusdfhuas
 
-vou pensar em um exemplo simples para anotar aqui, mas por enquanto existe um exempo na pasta. :3
+Vou pensar em um exemplo simples para anotar aqui, mas por enquanto existe um exempo na pasta. :3
 
 ## Behavioral
 
@@ -1063,9 +1064,106 @@ breadMachineApp.executeCommand('BTN-1') // ON
 breadMachineApp.undoCommand('BTN-1') // OFF
 ```
 
+## Mediator
 
+Define um objeto que encapsula, o como um conjunto de objetos interage. O mediator promove o acoplamento fraco ao evitar que os objeto se referenciem diretamente, permitindo que você varie sua interações.
 
+- Encapsula um conjunto de objetos
+- Desacopla objetos
+- Centraliza toda a comunicação em um único objeto
 
+Utilizar quando:
+
+- Quiser remover as dependencias entre classes concretas
+- Simplificar as comunicações de muitos para muitos, para um para muitos
+
+> Centralizador
+
+> Cuidado para não criar uma god class. Vise separar em mediator diferentes.
+
+Exemplo de medienor entre vendedor e comprador
+
+`productType.ts`
+
+```ts
+export type ProductType = { id: string, name: string; price: string;}
+```
+
+`seller.ts`
+
+```ts
+export class Seller {
+  private products: ProductType[] = [];
+  private mediator? : Mediator;
+
+  addProducts(...products: ProductType[]) : void {
+    products.forEach(product => this.products.push(product));
+  }
+
+  sell(id: string) : ProductType {
+    const productIndex = this.products.findIndex(product => product.id = id);
+    if(productIndex === -1) return;
+    const product = this.product.splice(productIndex,1);
+    return product[0];
+  }
+}
+```
+
+`mediator.ts`
+
+```ts
+export class Mediator {
+  private sellers: Seller[] = [];
+
+  addSeller(...sellers: Seller[]): void {
+    sellers.forEach(seller => this.sellers.push(seller));
+  }
+
+  buy(id : string): ProductType|void {
+    let product: ProductType | void;
+
+    for (let i = 0; i < this.sellers.length; i++) {
+      const product = this.sellers[i].sell(id);
+
+      if (product){
+        console.log('Produto: ', product.name, product.price)
+        return
+      }
+    }
+    console.log('Produto não encontrado');
+  }
+}
+```
+
+`buyer.ts`
+
+```ts
+export class Buyer {
+  constructor(private mediator: Mediator) {}
+
+  buy(id: string): void {
+    this.mediator.buy(id);
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const mediator = new Mediator();
+
+const albert = new Seller();
+albert.addProducts({id: '1', name: 'Theory of relativity', price: 99999999999.999});
+
+const nikola = new Seller();
+nikola.addProducts({id: '2', name: 'Tesla turbine', price: 99999999999.99})
+
+mediator.addSellers(albert, nikola);
+
+const smartPeople = new Buyer(mediator);
+smartPeople.buy('1'); // produto: 1 Theory of relativity 99999999999.999
+smartPeople.buy('2'); //produto: 2 Tesla turbine 99999999999.999
+```
 
 
 
