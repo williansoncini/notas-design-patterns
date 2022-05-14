@@ -975,14 +975,93 @@ Desta forma permitindo que você parametrize clientes com diferentes solicitaç�
 - Desacopla o código do objeto que faz a solicitação, do objeto que recebe a solicitação.
 - Usa composição ao invés de herança
 
-
 Quando utilizar?
 
 - Quando você deseja desacoplar o objeto que envia a solicitação do objeto que recebe
 - Você quer tratar um comando como um objeto (Tendo toda a parte de armazenamento, enfileiramento e etc...)
 - Você quer permitir que as solicitações posasm ser feitas e desfeitas
 
+> Suuuper meio de campo
 
+Exemplo
+
+`breadMachine.ts`
+
+```ts
+export class BreadMachine {
+  on() :void {
+    console.log('ON');
+  }
+  off() :void {
+    console.log('OFF');
+  }
+}
+```
+
+`command.ts`
+
+```ts
+export interface Command {
+  execute() : void;
+  undo() : void;
+}
+```
+
+`powerCommand.ts`
+
+```ts
+export class PowerCommand implements Command{
+  constructor(private readonly receiver : BreadMachine) {};
+
+  execute(): void {
+    this.receiver.on();
+  }
+
+  undo(): void {
+    this.receiver.off();
+  }
+}
+```
+
+`breadMachineApp.ts`
+
+```ts
+export class BreadMachineApp {
+  private commands : { [key: string, command: Command]} = {};
+
+  addCommand(key : string, command : Command) : void {
+    this.commands[key] = command;
+  }
+
+  executeCommand(key: string) : void {
+    this.commands[key].execute();
+  }
+
+  undoCommand(key: string) : void {
+    this.commands[key].undo();
+  }
+}
+```
+
+`main.ts`
+
+```ts
+//Receiver
+const breadMachine = new BreadMachine();
+
+//Command
+const powerCommand = new PowerCommand(breadMachine);
+
+powerCommand.execute() // ON
+powerCommand.undo() // OFF
+
+
+//Invoker
+const breadMachineApp = new BreadMachineApp();
+breadMachineApp.addCommand('BTN-1', powerCommand);
+breadMachineApp.executeCommand('BTN-1') // ON
+breadMachineApp.undoCommand('BTN-1') // OFF
+```
 
 
 
