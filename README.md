@@ -29,6 +29,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Behavioral](#behavioral)
     - [Strategy](#strategy)
   - [Command](#command)
+  - [Memento](#memento)
   - [Mediator](#mediator)
 
 # UML
@@ -1064,6 +1065,30 @@ breadMachineApp.executeCommand('BTN-1') // ON
 breadMachineApp.undoCommand('BTN-1') // OFF
 ```
 
+## Memento
+
+![](imgs/memento.png)
+
+Sem violar o encapsulamento, captura e externaliza o estado interno de um objeto, de modo que posteriormente o objeto possa ser restaurado para esse estado.
+
+Geralmente trabalha em comjunto com o padrão de projeto command
+
+- Muito utilizado nas aplicações que se utiliza o CTRL+Z
+- Tira a responsabilidade da classe geradora de tomar conta dos backups
+- Garante o encapsulamento e consistencia nos backups
+
+Aplicabilidade
+
+- Ter a possibilidade de restaurar versões anteriores de um objeto, sem violar o encapsulamento
+- Ter a função desfazer
+- Realizar backups de estados das classes desejadas no sistema
+
+
+
+
+
+
+
 ## Mediator
 
 ![](imgs/mediator.png)
@@ -1166,8 +1191,6 @@ const smartPeople = new Buyer(mediator);
 smartPeople.buy('1'); // produto: 1 Theory of relativity 99999999999.999
 smartPeople.buy('2'); //produto: 2 Tesla turbine 99999999999.999
 ```
-
-
 
 
 
