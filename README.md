@@ -1057,7 +1057,6 @@ const powerCommand = new PowerCommand(breadMachine);
 powerCommand.execute() // ON
 powerCommand.undo() // OFF
 
-
 //Invoker
 const breadMachineApp = new BreadMachineApp();
 breadMachineApp.addCommand('BTN-1', powerCommand);
@@ -1083,11 +1082,90 @@ Aplicabilidade
 - Ter a função desfazer
 - Realizar backups de estados das classes desejadas no sistema
 
+Exemplo: Salvando os dados de um carro
 
+Car.ts
 
+```ts
+export class Car {
+  constructor(private _name: string) {};
 
+  set name(name: string) : void {
+    this._name = name;
+  }
 
+  get name(): string {
+    return this._name;
+  }
 
+  save(): Readonly<Memento> {
+    return new ConcreteMemento(this._name)
+  }
+
+  restore(memento: Memento) : void {
+    const concreteMemento = memento;
+    this._name = concreteMemento.name();
+  }
+}
+```
+
+Memento.ts
+
+```ts
+export interface Memento {
+  getName(): string;
+}
+```
+
+ConcreteMemento.ts
+
+```ts
+export class ConcreteMemento implements Memento {
+  constructor(private _name : string) {}
+
+  get name(): string {
+    return this._name;
+  }
+}
+```
+
+CarBackupManager.ts
+
+```ts
+export class CarBackupManager {
+  private mementos = Memento[] = [];
+
+  constructor(private readonly car: Car){};
+
+  backup(): void {
+    this.mementos.push(this.car.save())
+  }
+
+  undo(): void {
+    const memento = this.mementos.pop();
+
+    if (!memento) return;
+
+    this.car.restore(memento);
+  }
+
+  showMementos() : void {
+    this.mementos.forEach(memento => console.log(memento));
+  }
+}
+```
+`main.ts`
+
+```ts
+const car = new Car('Bugatti');
+const carBackupManager(car);
+
+carBackupManager.backup(); // Memento = [Bugatti]
+car.name = 'Ferrari';
+carBackupManager.undo() // Memento = []
+
+console.log(car.name) // Bugatti
+```
 
 ## Mediator
 
