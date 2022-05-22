@@ -31,6 +31,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Command](#command)
   - [Memento](#memento)
   - [Mediator](#mediator)
+  - [State](#state)
 
 # UML
 
@@ -1269,6 +1270,117 @@ const smartPeople = new Buyer(mediator);
 smartPeople.buy('1'); // produto: 1 Theory of relativity 99999999999.999
 smartPeople.buy('2'); //produto: 2 Tesla turbine 99999999999.999
 ```
+
+## State
+
+![](imgs/state.png)
+
+Permite que um objeto altere seu comportamento quando seu estado interno muda. O objeto parecera ter mudado a classe.
+
+- O objeto muda seu comportamento de acordo com seu estado
+- Desacopla os estados de um objeto em objetos diferentes
+- Facilita a inclusão de novos estados sem alterar o passado
+
+Quando utilizar?
+
+- Quando um objeto pode se comportar de maneira diferente dependendo de seu estado (Pedido por exemplo)
+- Você não deseja utilizar condicionais para mudar o comportamento da classe de acordo com seus valores
+
+Exemplo de pedido que muda o comportamento de acordo com seu estado: Aprovado | Rejeitado
+
+`orderState.ts`
+
+```ts
+export interface OrderState {
+  approvePayment() : void;
+  rejectPayment() : void;
+  shipOrder() : void;
+}
+```
+
+`orderApproved.ts`
+
+```ts
+export class OrderAproved implements OrderState {
+  constructor(order: Order) {}
+
+  approvePayment() : void {
+    console.log('O pedido já está aprovadissimo!')
+  };
+
+  rejectPayment() : void {
+    console.log('Pedido rejeitado')
+    this.order.setState(new OrderRejected(this.order));
+  };
+
+  shipOrder() : void {
+    console.log('Pedido quentinho saindo :3!')
+  };
+}
+```
+
+`orderRejected.ts`
+
+```ts
+export class OrderRejected implements OrderState {
+  constructor(order: Order) {}
+
+  approvePayment() : void {
+    this.order.setState(new OrderAproved(this.order))
+    console.log('O pedido está aprovadissimo!')
+  };
+
+  rejectPayment() : void {
+    console.log('O pedido já está rejeitado')
+  };
+
+  shipOrder() : void {
+    console.log('Não vai dar não... O pedido está cancelado')
+  };
+}
+```
+
+`order.ts`
+
+```ts
+export class Order {
+  private state: OrderState = new OrderAproved(this);
+
+  getState() : OrderState {
+    return this.state;
+  }
+
+  setState(state : OrderState): void {
+    this.state = state;
+  }
+
+  approvePayment() : void {
+    this.state.aprovePayment();
+  }
+
+  rejectPayment() : void {
+    this.state.rejectPayment();
+  }
+
+  shipOrder(): void {
+    this.state.shipOrder();
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const order = new Order();
+order.rejectPayment();
+order.shipOrder(); // Não vai dar não... O pedido está cancelado
+order.approvePayment();
+order.shipOrder(); // Pedido quentinho saindo :3!
+```
+
+
+
+
 
 
 
