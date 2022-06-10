@@ -32,6 +32,8 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Memento](#memento)
   - [Mediator](#mediator)
   - [State](#state)
+  - [Chain of the responsibility](#chain-of-the-responsibility)
+  - [Template Method](#template-method)
 
 # UML
 
@@ -1378,7 +1380,97 @@ order.approvePayment();
 order.shipOrder(); // Pedido quentinho saindo :3!
 ```
 
+## Chain of the responsibility
 
+![](imgs/ChainTheResponsabilityV2.png)
+
+Evita o acoplamento do remetente de uma solicitação ao seu destinatário, permite que uma cadeia de objeto possa tratar a requisição.
+
+![](imgs/chainOfTheResponsability.png)
+
+Quando devo utilizar?
+
+- Quando uma requisição necessitar de diversos tratamentos, passando assim por uma sequencia de objetos para trata-la
+  - Os objetos podem escolher tratar ou passar para o próximo objeto da sequencia para tratar a requsição. Assim como podem retornar a requisição a qualquer momento.
+  - O cliente pode iniciar o tratamento usando qualquer objeto se for necessário. Não tendo assim a necessidade de uma sequencia
+- Quando quiser que os objetos responsaveis pelo tratamento da requisição possam variar em tempo de execução
+- Quando quiser que requisição passe por várias etapas diferentes. Podem trocar a ordem da sequencia de objetos na cadeia facilmente
+
+Exemplo:
+
+```ts
+abstract class ObjetoCadeia {
+  protected proximo: ObjetoCadeia | null = null;
+
+  addProximo(proximo: ObjetoCadeia): ObjetoCadeia {
+    this.proximo = proximo;
+    return proximo;
+  }
+
+  trata(requisicao: string): string {
+    if (this.proximo) return this.proximo.trata(requisicao);
+    return requisicao;
+  }
+}
+
+class ObjectA extends ObjetoCadeia {
+  trata(requisicao: string): string {
+    return super.trata(requisicao + ' Object-A');
+  }
+}
+
+class ObjectB extends ObjetoCadeia {
+  trata(requisicao: string): string {
+    return super.trata(requisicao + ' Object-B');
+  }
+}
+
+const objectA = new ObjectA();
+objectA.addProximo(new ObjectB()).addProximo(new ObjectA());
+console.log(objectA.trata('Exemplo de requisição!')); // Exemplo de requisição! Object-A Object-B Object-A
+```
+
+## Template Method
+
+![](imgs/templateMethod.png)
+
+Define o esqueleto do algoritimo, de forma que as coisas funcionem sempre de acordo com o seu formato.
+
+- Em vez de criar condicionais, crie templates, e execute eles quando forem necessários
+
+Um template, visa ser estatico, mantendo sempre sua ordem de execução. Esse é o prorósito para ele. Caso queira diferentes comportamentos, faça diferentes templates.
+
+Exemplo, deixando a classe concreta definir os métodos, menos seus retornos :3
+
+```ts
+export abstract class TemplateMethodBaseClass {
+  abstract stepA(): void;
+  abstract stepB(): void;
+
+  templateMethod() {
+    this.stepA();
+    this.hook();
+    this.stepB();
+  }
+}
+
+export class ConcreteTemplateMethod extends TemplateMethodBaseClass {
+  stepA(): void {
+    console.log('Sou o passo A');
+  }
+
+  stepB(): void {
+    console.log('Sou o passo B');
+  }
+}
+
+const concreteTemplate = new ConcreteTemplateMethod();
+concreteTemplate.templateMethod();
+/*
+Sou o passo A
+Sou o passo B
+*/
+```
 
 
 
