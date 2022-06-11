@@ -3,6 +3,8 @@ import { CustomerData } from './customerData';
 export abstract class CustomerDataParser {
   public customerData: CustomerData[] = [];
 
+  constructor(protected filePath: string) {}
+
   fixCustomerData = async (): Promise<void> => {
     this.customerData = await this.parseDate();
     this.customerData = this.fixCpf();
