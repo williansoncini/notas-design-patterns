@@ -34,6 +34,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [State](#state)
   - [Chain of the responsibility](#chain-of-the-responsibility)
   - [Template Method](#template-method)
+  - [Oberver](#oberver)
 
 # UML
 
@@ -1471,6 +1472,25 @@ Sou o passo A
 Sou o passo B
 */
 ```
+## Oberver
+
+![](imgs/observer.png)
+
+Define uma dependencia um para muitos entre os objetos, de maneira que, quando um objeto é modificado, todos os outros são notificados e atualizados.
+
+O professor deu um exemplo de newsletter - Onde uma companhia disparia muitos e-mails para clientes.
+
+- Implementado com dois tipos de objetos, que são os observadores e os observaveis. On são muitos observadores para um objeto observavel.
+- Objetos observaveis teem de ter uma referencia com seus observadores, para quando tal objeto mudar todos os observadores serem notificados
+- Objetos observadores, teem de ter uma maneira de receber notificações de seus objetos observaveis.
+
+
+
+
+
+
+
+
 
 
 
