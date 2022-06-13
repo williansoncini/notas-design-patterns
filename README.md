@@ -28,15 +28,15 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
     - [Flyweight](#flyweight)
   - [Behavioral](#behavioral)
     - [Strategy](#strategy)
-  - [Command](#command)
-  - [Memento](#memento)
-  - [Mediator](#mediator)
-  - [State](#state)
-  - [Chain of the responsibility](#chain-of-the-responsibility)
-  - [Template Method](#template-method)
-  - [Oberver](#oberver)
-  - [Iterator](#iterator)
-  - [Visitor](#visitor)
+    - [Command](#command)
+    - [Memento](#memento)
+    - [Mediator](#mediator)
+    - [State](#state)
+    - [Chain of the responsibility](#chain-of-the-responsibility)
+    - [Template Method](#template-method)
+    - [Oberver](#oberver)
+    - [Iterator](#iterator)
+    - [Visitor](#visitor)
 
 # UML
 
@@ -966,7 +966,7 @@ console.log(shoppingCart.getTotalWithDiscount()); // 160
 
 Assim caso se faça necessário uma nova estratégia de desconto, basta a criação de mais uma classe de desconto. Assim a o trecho abaixo poderá ser substituido sem problemas `shoppingCart.discount = new CustomDiscount();`.
 
-## Command
+### Command
 
 ![](imgs/Command.png)
 
@@ -1070,7 +1070,7 @@ breadMachineApp.executeCommand('BTN-1') // ON
 breadMachineApp.undoCommand('BTN-1') // OFF
 ```
 
-## Memento
+### Memento
 
 ![](imgs/memento.png)
 
@@ -1173,7 +1173,7 @@ carBackupManager.undo() // Memento = []
 console.log(car.name) // Bugatti
 ```
 
-## Mediator
+### Mediator
 
 ![](imgs/mediator.png)
 
@@ -1276,7 +1276,7 @@ smartPeople.buy('1'); // produto: 1 Theory of relativity 99999999999.999
 smartPeople.buy('2'); //produto: 2 Tesla turbine 99999999999.999
 ```
 
-## State
+### State
 
 ![](imgs/state.png)
 
@@ -1383,7 +1383,7 @@ order.approvePayment();
 order.shipOrder(); // Pedido quentinho saindo :3!
 ```
 
-## Chain of the responsibility
+### Chain of the responsibility
 
 ![](imgs/ChainTheResponsabilityV2.png)
 
@@ -1433,7 +1433,7 @@ objectA.addProximo(new ObjectB()).addProximo(new ObjectA());
 console.log(objectA.trata('Exemplo de requisição!')); // Exemplo de requisição! Object-A Object-B Object-A
 ```
 
-## Template Method
+### Template Method
 
 ![](imgs/templateMethod.png)
 
@@ -1474,7 +1474,7 @@ Sou o passo A
 Sou o passo B
 */
 ```
-## Oberver
+### Oberver
 
 ![](imgs/observer.png)
 
@@ -1486,7 +1486,9 @@ O professor deu um exemplo de newsletter - Onde uma companhia disparia muitos e-
 - Objetos observaveis teem de ter uma referencia com seus observadores, para quando tal objeto mudar todos os observadores serem notificados
 - Objetos observadores, teem de ter uma maneira de receber notificações de seus objetos observaveis.
 
-## Iterator
+*O exemplo está na pasta src/behavioural/observer :3*
+
+### Iterator
 
 ![](imgs/iterator.png)
 
@@ -1580,7 +1582,7 @@ dataStructure.resetIterator(); // index = 0
 // Se lembre que se não resetar o index, ao fazer o for ele pode 'roubar' os valores.
 ```
 
-## Visitor
+### Visitor
 
 ![](imgs/visitor.png)
 
