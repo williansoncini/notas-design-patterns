@@ -35,6 +35,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Chain of the responsibility](#chain-of-the-responsibility)
   - [Template Method](#template-method)
   - [Oberver](#oberver)
+  - [Iterator](#iterator)
 
 # UML
 
@@ -1483,6 +1484,23 @@ O professor deu um exemplo de newsletter - Onde uma companhia disparia muitos e-
 - Implementado com dois tipos de objetos, que são os observadores e os observaveis. On são muitos observadores para um objeto observavel.
 - Objetos observaveis teem de ter uma referencia com seus observadores, para quando tal objeto mudar todos os observadores serem notificados
 - Objetos observadores, teem de ter uma maneira de receber notificações de seus objetos observaveis.
+
+## Iterator
+
+![](imgs/iterator.png)
+
+Delega a iteração de um objeto a outro objeto. A maneita como a iteração do objeto será percorrido, fica como responsabilidade de outro objeto, separando as responsabilidades de um mesmo objeto.
+
+- Permite vários tipos de travessia, facilitando assim a diversificação de iteração dos objetos
+- Permiter trocar a forma de iteração em tempo de execução
+- Geralmente as linguagens já disponibilizam uma fomra de se utilizar iteradores
+
+
+Exemplo
+
+
+
+
 
 
 
