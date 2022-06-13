@@ -36,6 +36,7 @@ Começando com UML, mas acho que vou ter que fazer notas futuras a parte sobre e
   - [Template Method](#template-method)
   - [Oberver](#oberver)
   - [Iterator](#iterator)
+  - [Visitor](#visitor)
 
 # UML
 
@@ -1497,6 +1498,156 @@ Delega a iteração de um objeto a outro objeto. A maneita como a iteração do 
 
 
 Exemplo
+
+```ts
+export interface IteratorProtocol<T> extends Iterator<T> {
+  reset(): void;
+}
+```
+
+`defaultIterator.ts`
+
+```ts
+export class DefaultIterator implements IteratorProtocol<string> {
+  private index = 0;
+
+  constructor(private readonly dataStructure: MyDataStructure) {}
+
+  reset(): void {
+    this.index = 0;
+  }
+  next(): IteratorResult<string> {
+    const returnValue = this.makeValue(this.dataStructure.items[this.index]);
+    returnValue.done = this.index >= this.dataStructure.size();
+    this.index++;
+    return returnValue;
+  }
+
+  private makeValue(value: string): IteratorResult<string> {
+    return { value, done: false };
+  }
+}
+```
+
+`myDataStructure`
+
+```ts
+export class MyDataStructure {
+  private _items: string[] = [];
+  private iterator: IteratorProtocol<string> = new MyDefaultIterator(this);
+
+  addItem(...items: string[]): void {
+    items.forEach((item) => this._items.push(item));
+  }
+
+  get items(): string[] {
+    return this._items;
+  }
+
+  size(): number {
+    return this._items.length;
+  }
+
+  chanceIterator(iterator: IteratorProtocol<string>): void {
+    this.iterator = iterator;
+  }
+
+  [Symbol.iterator](): IteratorProtocol<string> {
+    this.iterator.reset();
+    return this.iterator;
+  }
+
+  resetIterator(): void {
+    this.iterator.reset();
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const dataStructure = new MyDataStructure();
+dataStructure.addItem('ALBERT', 'NIKOLA', 'THOMAS');
+
+const [a, b] = dataStructure; // ALBERT NIKOLA
+
+for (const item of dataStructure) {
+  console.log(item); // THOMAS
+}
+
+dataStructure.resetIterator(); // index = 0
+
+// Se lembre que se não resetar o index, ao fazer o for ele pode 'roubar' os valores.
+```
+
+## Visitor
+
+![](imgs/visitor.png)
+
+Permite que o algoritimo de uma operação de um objeto esteja desacoplado de seu objeto, deixando isso em objetos diferentes, que saberão oque fazer ao visitar o objeto.
+
+Exemplo do curso: Calcular taxas diferentes de produtos, de acordo com seu pais.
+
+Exemplo:
+
+`productProtocol.ts`
+
+```ts
+export abstract class ProductProtocol {
+  constructor(protected name: string, protected price: number){}
+
+  getPrice(): number {
+    return this.price;
+  }
+
+  abstract getPriceWithTaxes(visitor: TaxVisitorProtocol) : number;
+}
+```
+
+`food.ts`
+
+```ts
+export class Food extends ProductProtocol {
+  constructor(protected price:number){
+    super('Mamitar delicia', price);
+  }
+
+  getPriceWithTaxes(visitor: TaxVisitorProtocol) : number {
+    return visitor.calculateTaxForFood(this);
+  }
+}
+```
+
+`taxProtocol.ts`
+
+```ts
+export interface TaxVisitorProtocol {
+  calculateTaxForFood(food: Food): number;
+  // Aqui poderia ter diversos produtos
+}
+```
+
+`brazilTaxVisitor.ts`
+
+```ts
+export class BrazilTaxVisitor implements TaxVisitorProtocol {
+  private tax = 0.2;
+
+  calculateTaxForFood(food: ProductProtocol) {
+    return food.getPrice() + food.getPrice() * tax;
+  }
+}
+```
+
+`main.ts`
+
+```ts
+const food = new Food(25);
+const brazilTaxVisitor = new BrazilTaxVisitor();
+
+food.getPrice() // 25 : Marmita delicinha :3
+food.getPriceWithTaxes(brazilTaxVisitor) // 30 : 5 reais de taxas
+```
 
 
 
